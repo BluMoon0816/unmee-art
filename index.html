@@ -62,6 +62,9 @@ body{font-family:var(--font)}
 .chlist a i{font-style:normal;opacity:.5}
 .chlist a:hover,.chlist a:focus-visible,.chlist a.lit{color:var(--ink)}
 @media (max-width:640px){.chlist{font-size:9.5px;gap:0 10px}}
+.clinks{position:absolute;inset:0;margin:0;padding:0;pointer-events:none;z-index:3}
+.clink{position:absolute;display:block;visibility:hidden;color:transparent;font-size:1px;overflow:hidden;border-radius:3px;pointer-events:auto;cursor:pointer;text-decoration:none}
+.clink:focus-visible{outline:2px solid var(--field);outline-offset:2px}
 </style>
 
 <div class="track" id="track">
@@ -70,6 +73,7 @@ body{font-family:var(--font)}
     <div class="grab" id="grab" aria-hidden="true"></div>
     <img class="logo" id="logo" alt="unmee" src="data:image/png;base64,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">
     <ul class="chlist" id="chlist" aria-label="Channels"></ul>
+    <nav class="clinks" id="clinks" aria-label="Contact"><a class="clink" href="mailto:hello@unmee.art">email: hello@unmee.art</a><a class="clink" href="https://www.instagram.com/unmee.art/" target="_blank" rel="noopener">instagram: @unmee.art</a></nav>
     <header class="ident" id="ident"><b>unmee</b><span>working across art and design, philosophy and the human sciences</span></header>
   </div>
 </div>
@@ -150,6 +154,7 @@ const SLOT_A=['learning','questioning','observing','reflecting','interpreting','
   FIELDS=['art','design','research','philosophy','human sciences'],FIELD_SET=new Set(FIELDS);
 let TM=null,latlas=null,tStart=performance.now(),TXCH=0,tmx=-1e4,tmy=-1e4;
 addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();tmx=e.clientX-r.left;tmy=e.clientY-r.top});
+addEventListener('pointerdown',e=>{const r=cv.getBoundingClientRect();tmx=e.clientX-r.left;tmy=e.clientY-r.top});
 function buildLowAtlas(){const s=Math.ceil(CELL*DPR);latlas=document.createElement('canvas');latlas.width=s*26;latlas.height=s*2;const a=latlas.getContext('2d');
   a.font=`600 ${Math.round(CELL*.95*DPR)}px ${tok('--font')}`;a.textAlign='center';a.textBaseline='middle';
   [TXT.ink,TXT.acc].forEach((col,r)=>{a.fillStyle=col;for(let i=0;i<26;i++)a.fillText(LOW[i],i*s+s/2,r*s+s/2)})}
@@ -249,13 +254,13 @@ let lastFree=-1,RAWS=0,holdT=0,lastNow=performance.now();
 
 /* ---------- the TV wall, reached by a plain page scroll: the globe slides up and away, and the wall arrives from below.
    The televisions are drawn like the earth: fields of rain letters whose density and soft bright rims shape them, no lines. ---------- */
-// wall grid: 5 across × 3 down on desktop, 3 across × 5 down on phones
-let TVC=5,TVR=3;
+// wall grid: 4 across × 3 down on desktop, 3 across × 4 down on phones
+let TVC=4,TVR=3;
 // where things sit on the page below the globe (page y is measured from the top of the globe section)
 function pageLayout(Rs){const idxS=Math.max(88,H*.105),idxP=H/2+Rs+Math.max(130,H*.18),wallS=idxS+Math.max(90,H*.11);return{idxS,idxP,dyEnd:idxP-idxS,wallS}}
 // the title shown on a channel's screen when it is hovered (capital letters, numbers and spaces only)
-const TV_TITLES=[...Array(15)].map(()=> 'WORK TITLE');
-['WORK IN BRIEF','ABOUT ME','ARTWORK','DESIGN','RESEARCH','TRIALS','WRITING','STORY MODE','FIELD NOTES','REFERENCES','COLLABS','NO SIGNAL','NOW','CONTACT','ARCHIVE'].forEach((n,k)=>TV_TITLES[k]=n);
+const TV_TITLES=[...Array(12)].map(()=> 'WORK TITLE');
+['WORK IN BRIEF','ABOUT ME','A PILOT STUDY','SELECTED WORKS','PHOTOGRAPHY','EXPERIMENTATION','COLLECTED WORDS','LIBRARY','SHOP','COLLABORATIONS','CONTACT','ARCHIVE'].forEach((n,k)=>TV_TITLES[k]=n);
 // the plain channel list in the top-right corner: hovering a name tunes the matching screen on the wall
 let listHov=-1,listHovAt=0;const chList=document.getElementById('chlist'),chLinks=[];
 TV_TITLES.forEach((n,k)=>{const li=document.createElement('li'),a=document.createElement('a');a.href='#';a.innerHTML='<i>'+String(k+1).padStart(2,'0')+'</i>'+n;
@@ -263,11 +268,14 @@ TV_TITLES.forEach((n,k)=>{const li=document.createElement('li'),a=document.creat
   a.addEventListener('focus',()=>{listHov=k;listHovAt=performance.now()});a.addEventListener('blur',()=>{if(listHov===k)listHov=-1});
   a.addEventListener('click',e=>e.preventDefault());li.appendChild(a);chList.appendChild(li);chLinks.push(a)});
 let tvHov=-1,tvHovT=0,IDXT=-1;
+// channel 14 (CONTACT): its screen shows these lines; on narrow screens the email breaks after the @
+const CCH=TV_TITLES.indexOf('CONTACT'),cA=[...document.querySelectorAll('.clink')];let cHov=-1;
+cA.forEach((a,n)=>{a.addEventListener('pointerenter',()=>{cHov=n});a.addEventListener('pointerleave',()=>{if(cHov===n)cHov=-1});a.addEventListener('focus',()=>{cHov=n;listHov=CCH;listHovAt=performance.now()});a.addEventListener('blur',()=>{if(cHov===n)cHov=-1;if(listHov===CCH)listHov=-1})});
 function sdRR(px,py,cx,cy,hw,hh,r){const qx=Math.abs(px-cx)-(hw-r),qy=Math.abs(py-cy)-(hh-r);return Math.hypot(Math.max(qx,0),Math.max(qy,0))+Math.min(Math.max(qx,qy),0)-r}
 function drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA){
   // the sentence fades first, then the page scrolls by one screen height
   const PL=pageLayout(Rs),u0=sstep(.15,.97,q),dy=u0*PL.dyEnd;
-  TVC=W<640?3:5;TVR=W<640?5:3;
+  TVC=W<640?3:4;TVR=W<640?4:3;
   const gap=Math.min(W,H)*.032,aw=W*.95,topB=PL.wallS,botB=toy+(Math.ceil(H/CELL)-(W<640?9:6))*CELL-Math.max(18,H*.025),ah=botB-topB;let w=(aw-gap*(TVC-1))/TVC,h=w*.8;if(h*TVR+gap*(TVR-1)>ah){h=(ah-gap*(TVR-1))/TVR;w=h/.8}
   const ox=W/2-(w*TVC+gap*(TVC-1))/2,oy=PL.dyEnd+(topB+botB)/2-(h*TVR+gap*(TVR-1))/2,m=w*.075,chin=h*.17,sx0=m,sy0=m,sw=w-2*m,sh=h-m-chin,scx=sx0+sw/2,scy=sy0+sh/2,RL=Math.min(sw,sh)*.42;
   // the tagline belongs to the first section: it scrolls away with the globe
@@ -285,6 +293,10 @@ function drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA){
   // the letter grid scrolls with the page, so everything moves together like real content
   const i0=Math.floor(tCols/2-W/(2*CG)-1),i1=Math.ceil(tCols/2+W/(2*CG)),j0=Math.floor(tRows/2+(dy-H/2)/CG-1),j1=Math.ceil(tRows/2+(dy+H/2)/CG+1);
   const rb=w*.07,rS=Math.min(sw,sh)*.2,lblY=h-chin*.5,gR=Rs;
+  // [text, row offset from the screen's middle, kind: 0 heading, 1 email, 2 instagram]
+  const TCOLS=Math.floor(sw/CG)-1,ttlLines=s=>{if(s.length<=TCOLS)return[[s,0,0]];const sp=[...s].map((ch,n)=>ch===' '?n:-1).filter(n=>n>0);
+    if(!sp.length)return[[s,0,1]];const cut=sp.reduce((a,b)=>Math.abs(b-s.length/2)<Math.abs(a-s.length/2)?b:a);return[[s.slice(0,cut),0,0],[s.slice(cut+1),1,0]]},TSM=[];
+  const CL=sw/CG<17?[['CONTACT',-3,0],['HELLO@',-1,1],['UNMEE.ART',0,1],['@UNMEE.ART',2,2]]:[['CONTACT',-2,0],['HELLO@UNMEE.ART',0,1],['@UNMEE.ART',2,2]],CT=[];
   const glyph=(ci,row,a,cx,cy)=>{if(a<.02)return;c.globalAlpha=a>1?1:a;c.drawImage(atlas,ci*sA,row*sA,sA,sA,Math.round((cx-CG/2)*DPR),Math.round((cy-CG/2)*DPR),d,d)};
   // one earth: page position (gx,gy), radius R, rotation matrix mm; returns [alpha, isLand] or null
   const earth=(px,py,gx,gy,R,mm,b,boost)=>{const X=(px-gx)/R,Y=(gy-py)/R,r=X*X+Y*Y;if(r>=1)return null;const Zg=Math.sqrt(1-r),g=hit(mm[0]*X+mm[3]*Y+mm[6]*Zg,mm[1]*X+mm[4]*Y+mm[7]*Zg,mm[2]*X+mm[5]*Y+mm[8]*Zg);
@@ -318,9 +330,14 @@ function drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA){
       let aG=0,row=on?BS:0;
       if(covS>0){
         const GX=TX+scx,GY=TY+scy;
-        if(on){const ttl=TV_TITLES[k],qx=Math.floor((cx-GX)/CG+ttl.length/2+1e-3),el=t-actT;
+        if(on&&k===CCH&&covS>.5){const rr=Math.round((py-GY)/CG),Lc=CL.find(l=>l[1]===rr);
+          if(Lc){const s=Lc[0],qx=Math.floor((cx-GX)/CG+s.length/2+1e-3);if(qx>=0&&qx<s.length){
+            const start=actT+.1+(rr+3)*.06,lock=start+.32+hsh(qx*5.1+rr*2.3)*.33;
+            if(t>=start){const settled=t>=lock;CT.push([settled?s[qx]:CHARS[Math.floor(hsh(qx*1.31+rr+Math.floor(t*16*.55))*CHARS.length)],cx,cy,settled?Lc[2]:-1,Lc[2]])}continue}}}
+        if(on){const TLs=ttlLines(TV_TITLES[k]),rr=Math.round((py-GY)/CG),TLr=TLs.find(l=>l[1]===rr)||['',0,0],ttl=TLr[0],qx=Math.floor((cx-GX)/CG+ttl.length/2+1e-3),el=t-actT;
+          if(TLr[2]){if(Math.abs(cx-GX)<sw*.48){if(!TSM.length)TSM.push([ttl,GX,GY-dy,k]);continue}}
           // hovered: gentle static, and the title decodes inside it like the hero sentence
-          if(Math.abs(py-GY)<CG*.5&&qx>=0&&qx<ttl.length&&ttl[qx]!==' '){const start=actT+.1,lock=start+.32+hsh(qx*5.1+k)*.33;
+          if(ttl&&!TLr[2]&&qx>=0&&qx<ttl.length&&ttl[qx]!==' '){const start=actT+.1+rr*.12,lock=start+.32+hsh(qx*5.1+k+rr*9)*.33;
             if(t>=start){const settled=t>=lock,gi=settled?CHARS.indexOf(ttl[qx]):Math.floor(hsh(qx*1.31+k+Math.floor(t*16*.55))*CHARS.length);
               glyph(gi,3,covS,cx,cy);glyph(gi,BL,(settled?1:.5)*covS,cx,cy);continue}}
           const sv=hsh(i*3.1+j*5.7+Math.floor(t*8));aG=covS*(.06+.22*sv*sv)*Math.min(1,el/.15);
@@ -333,6 +350,20 @@ function drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA){
       glyph(ci,aB>aG&&on?BS:row,a,cx,cy);
     }
   }
+  // the contact letters (they need @ and . so they are typed rather than taken from the letter sheet)
+  const ext=[null,null,null];
+  if(CT.length){c.font=`600 ${Math.round(CG*.95*DPR)}px ${tok('--font')}`;c.textAlign='center';c.textBaseline='middle';
+    for(const[ch,x,y,kd,role]of CT){const e=ext[role]||(ext[role]=[1e9,1e9,-1e9,-1e9]);e[0]=Math.min(e[0],x);e[1]=Math.min(e[1],y);e[2]=Math.max(e[2],x);e[3]=Math.max(e[3],y);
+      c.globalAlpha=kd<0?.5:1;c.fillStyle=kd<0?COL.rain:kd===0?COL.head:TXT.field;c.fillText(ch,Math.round(x*DPR),Math.round(y*DPR))}
+    for(const r of[1,2]){const e=ext[r];if(e&&cHov===r-1){c.globalAlpha=1;c.fillStyle=TXT.field;c.fillRect(Math.round((e[0]-CG/2)*DPR),Math.round((e[3]+CG*.55)*DPR),Math.round((e[2]-e[0]+CG)*DPR),Math.max(1,Math.round(DPR)))}}}
+  for(const[s,gx,gy,kk]of TSM){const pitch=Math.min(CG,sw*.94/s.length);c.font=`600 ${Math.round(pitch*1.02*DPR)}px ${tok('--font')}`;c.textAlign='center';c.textBaseline='middle';
+    for(let q=0;q<s.length;q++){const start=actT+.1,lock=start+.32+hsh(q*5.1+kk)*.33;if(t<start)continue;const settled=t>=lock;
+      c.globalAlpha=settled?1:.5;c.fillStyle=settled?(BL===2?TXT.field:COL.head):COL.rain;
+      c.fillText(settled?s[q]:CHARS[Math.floor(hsh(q*1.31+kk+Math.floor(t*16*.55))*CHARS.length)],Math.round((gx+(q+.5-s.length/2)*pitch)*DPR),Math.round(gy*DPR))}}
+  // the links become clickable once the details have settled on the screen
+  const cOn=act===CCH&&t-actT>.9;
+  cA.forEach((a,n)=>{const e=ext[n+1];if(!cOn||!e){a.style.visibility='hidden';return}
+    a.style.visibility='visible';a.style.left=(e[0]-CG/2-3)+'px';a.style.top=(e[1]-CG)+'px';a.style.width=(e[2]-e[0]+CG+6)+'px';a.style.height=(e[3]-e[1]+CG*2)+'px'});
   // INDEX: about twice the size of SCROLL, same typeface and spacing; it decodes as it scrolls into view, then breathes
   {const lbl='INDEX',fs=Math.round(clamp(CELL*2.1,18,30)),pitch=fs*1.3,yy=PL.idxP-dy,x0=W/2-(lbl.length-1)*pitch/2;
    if(yy<H-fs){if(IDXT<0)IDXT=t}else IDXT=-1;
@@ -458,7 +489,7 @@ function frame(now){
   NMsz=CELL+(CELL*.78-CELL)*xf;
   // the sentence keeps its full size the whole time; only the rain shrinks around it
   if(TM){let a0=1e9,b0=1e9,a1=-1e9,b1=-1e9;for(const L of TM.lines){const x0=W/2+(L.col-tCols/2)*TS,x1=W/2+(L.col+L.n-tCols/2)*TS,y0=H/2+(L.row-tRows/2)*TS;a0=Math.min(a0,x0);a1=Math.max(a1,x1);b0=Math.min(b0,y0);b1=Math.max(b1,y0+TS)}const mg=TS*1.6;TXB=[a0-mg,b0-mg,a1+mg,b1+mg]}
-  if(q>0)drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA);else drawGrid(CG);
+  if(q>0)drawTVWall(t,q,CG,tCols,tRows,Rs,tox,toy,SA);else{drawGrid(CG);cA.forEach(a=>{a.style.visibility='hidden'})}
   // stickers pop in once the globe has formed, and pop out again if you scroll back up into the zoom
   drawStickers(pageLayout(Rs),TDY,t,p>.97,CG,Rs);
   // the sentence keeps its full size on the original grid
